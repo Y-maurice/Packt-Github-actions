@@ -27,6 +27,8 @@ jobs:
                   echo "output1=value1" >> "$GITHUB_OUTPUT"
                   echo "output2=value2" >> "$GITHUB_OUTPUT"
                   cat "$GITHUB_OUTPUT"
+            - name: step with mistake
+              run: |
                   echo "mistake=true" > "$GITHUB_OUTPUT"
                   cat "$GITHUB_OUTPUT"
 
@@ -38,5 +40,5 @@ jobs:
             - name: Deploy
               run: echo "Deploying"
             - name: Print Outputs
-              run: | 
-               echo "output 1: ${{needs.build.outputs.output1}}"
+              run: |
+                  echo "output 1: ${{needs.build.outputs.output1}}"
