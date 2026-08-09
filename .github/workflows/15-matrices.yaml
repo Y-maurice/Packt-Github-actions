@@ -56,7 +56,7 @@ jobs:
 
           - opacity: 50
 
-        execlude:
+        exclude:
           - opacity: 75
 
 
