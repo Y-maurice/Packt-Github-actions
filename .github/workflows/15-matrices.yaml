@@ -1,39 +1,51 @@
 name: 15 - Working with Matrices
 
 on:
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-    backwards-compatibility:
-        name: ${{matrix.os}}-${{matrix.node-version}}
-        runs-on: ${{matrix.os}}
-        strategy:
-            fail-fast: true
-            matrix:
-                node-version: [18.x, 20.x, 21.x]
-                os:
-                    - ubuntu-latest
-                    - windows-latest
-                include:
-                    - os: ubuntu-latest
-                      node-version: 16.x
-                    - os: ubuntu-latest
-                      node-version: 21.x
-                      tag: experimental
+  backwards-compatibility:
+    name: ${{matrix.os}}-${{matrix.node-version}}
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: true
+      matrix:
+        node-version: [18.x, 20.x, 21.x]
+        os:
+          - ubuntu-latest
+          - windows-latest
+        include:
+          - os: ubuntu-latest
+            node-version: 16.x
+          - os: ubuntu-latest
+            node-version: 21.x
+            tag: experimental
 
-        steps:
-            - name: setup node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: ${{matrix.node-version}}
+    steps:
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{matrix.node-version}}
 
-            - name: Fail if experimental
-              if: matrix.tag == 'experimental'
-              run: exit 1
+      - name: Fail if experimental
+        if: matrix.tag == 'experimental'
+        run: exit 1
+
+      - name: perform tests
+        run: |
+          echo "Running tests on OS ${{matrix.os}} and NodeJS ${{matrix.node-version}}"
+          sleep 10
+      - name: Upload test results
+        run: echo "uploading test results"
+  include-example:
+    name: ${{matrix.color}}-${{matrix.shape}}-${{matrix.size}}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        color: [red, green]
+        shape: [circle, square]
+        size: [small, large]
+        include:
+          - color: red
+            shape: triangle
             
-            - name: perform tests
-              run: |
-               echo "Running tests on OS ${{matrix.os}} and NodeJS ${{matrix.node-version}}"
-               sleep 10
-            - name: Upload test results
-              run: echo "uploading test results"
