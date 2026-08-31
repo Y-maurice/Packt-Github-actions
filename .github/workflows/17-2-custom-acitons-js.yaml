@@ -12,6 +12,10 @@ on:
             working-dir:
                 type: string
                 default: 17-custom-actions/react-app
+            debug:
+                type: boolean
+                default: false
+
 
 
    
@@ -30,7 +34,8 @@ jobs:
               uses: ./.github/actions/js-dependency-update
               with:
                 base-branch: ${{inputs.base-branch}}
-                target-branch: ${{inputs.target-branch}}
+                head-branch: ${{inputs.target-branch}}
                 working-directory: ${{inputs.base-branch}}
                 gh-token: ${{secrets.GITHUB_TOKEN}}
+                debug: ${{inputs.debug}}
              
