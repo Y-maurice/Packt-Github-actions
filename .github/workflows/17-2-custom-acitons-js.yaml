@@ -17,7 +17,9 @@ on:
    
 
 
-
+permissions:
+    contents: write
+    pull-requests: write
 jobs:
     dependency-update:
         runs-on: ubuntu-latest
@@ -30,4 +32,5 @@ jobs:
                 base-branch: ${{inputs.base-branch}}
                 target-branch: ${{inputs.target-branch}}
                 working-directory: ${{inputs.base-branch}}
+                gh-token: ${{secrets.GITHUB_TOKEN}}
              
