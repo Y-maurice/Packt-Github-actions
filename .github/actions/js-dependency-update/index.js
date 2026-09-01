@@ -11,21 +11,21 @@ const validateBranchName = ({ branchName }) => /^[a-zA-Z0-9_\-\.\/]+$/.test(bran
 const validateDirectoryName = ({ dirName }) => /^[a-zA-Z0-9_\-\/]+$/.test(dirName);
 
 
-const setUpLogger = ({debug, prefix} = {debug: false, prefix: ''}) => ({
+const setUpLogger = ({ debug, prefix } = { debug: false, prefix: '' }) => ({
 
     debug: (message) => {
-        if(debug){
-            core.info(`DEBUG ${prefix}${prefix?  ' : ' : ''}${message}`);
+        if (debug) {
+            core.info(`DEBUG ${prefix}${prefix ? ' : ' : ''}${message}`);
 
         }
     },
 
     info: (message) => {
-        core.info(`${prefix}${prefix?  ' : ' : ''}${message}`);
+        core.info(`${prefix}${prefix ? ' : ' : ''}${message}`);
     },
 
     error: (message) => {
-        core.error(`${prefix}${prefix?  ' : ' : ''}${message}`);
+        core.error(`${prefix}${prefix ? ' : ' : ''}${message}`);
     }
 });
 
@@ -33,11 +33,11 @@ const setUpLogger = ({debug, prefix} = {debug: false, prefix: ''}) => ({
 async function run() {
 
     const baseBranch = core.getInput('base-branch', { required: true });
-    const headBranch = core.getInput('head-branch', {required : true});
+    const headBranch = core.getInput('head-branch', { required: true });
     const ghToken = core.getInput('gh-token', { required: true });
     const workingDir = core.getInput('working-directory', { required: true });
     const debug = core.getBooleanInput('debug');
-    const logger = setUpLogger({debug, prefix: '[js-dependency-update]'});
+    const logger = setUpLogger({ debug, prefix: '[js-dependency-update]' });
 
     const commonExecOpts = {
         cwd: workingDir
@@ -75,7 +75,11 @@ async function run() {
         ...commonExecOpts
     });
 
+    let updatesAvailable = false;
+
     if (gitStatus.stdout.length > 0) {
+        updatesAvailable = true;
+
         logger.debug('There are updates available!');
         logger.debug('Setting up git')
         await setupGit();
@@ -128,6 +132,9 @@ async function run() {
             3.1 if there are modified files, create a PR to the base-branch using the head-branch
             3.2 otherwise, conclude the custom action
      */
+
+    logger.debug(`Setting updates-available output to true ${updatesAvailable}`);
+    core.setOutput('updates-available', true);
 }
 
-run()
+run();
