@@ -4,15 +4,16 @@ on:
     pull_request:
 
 jobs:
-    unsafe-pr:
+    safer-pr:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
             - name: Check PR title
+              env:
+                TITLE: ${{github.event.pull_request.title}}
               run: |
-               title = ${{github.event.pull_request.title}}
-               if [[ $title =~ ^feat]]; then
+               if [[ $TITLE =~ ^feat]]; then
                echo "PR is a feature"
                exit 0
                else
